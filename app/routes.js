@@ -7,7 +7,7 @@ const mongojs = require("mongojs");
 // Database configuration
 // ===================================================================
 // Save the URL of our database as well as the name of our collection
-const databaseUrl = "creepyscraper";
+const databaseUrl = "movienewsscraper";
 const collections = ["scrapedData"];
 
 // Use mongojs to hook the database to the db variable
@@ -40,19 +40,19 @@ module.exports = function (app) {
 
     /*--- Scrape ---*/
     app.get("/scrape", function (req, res) {
-        const url = "https://www.creepypasta.com/"
+        const url = "https://screenrant.com/movie-news/"
         axios.get(url)
             .then(function (response) {
 
                 // load response into cheerio by saving it as a variable
                 const $ = cheerio.load(response.data);
 
-                $(".pt-cv-title").each(function (i, element) {
+                $(".bc-title").each(function (i, element) {
 
                     let title = $(this).children("a").text();
-                    let summary = $(this).siblings(".pt-cv-content").text();
+                    let summary = $(this).siblings(".bc-excerpt").text();
                     let link = $(this).children("a").attr("href");
-    
+
                     // if title, summary, and link exist
                     if (title && summary && link) {
                         //save into database
@@ -70,12 +70,12 @@ module.exports = function (app) {
                             });
                     }
                 });
-                
+
 
             })
-        // .catch(function (error) {
-        //     console.log(error);
-        // });
+            .catch(function (error) {
+                console.log(error);
+            });
         res.send("scrape complete")
 
     })

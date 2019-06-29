@@ -1,3 +1,7 @@
+// Require request and cheerio. This makes the scraping possible
+//====================================================================
+const cheerio = require("cheerio");
+const axios = require("axios");
 const mongojs = require("mongojs");
 
 // Database configuration
@@ -10,8 +14,8 @@ const collections = ["scrapedData"];
 const db = mongojs(databaseUrl, collections);
 
 // This makes sure that any errors are logged if mongodb runs into an issue
-db.on("error", function(error) {
-  console.log("Database Error:", error);
+db.on("error", function (error) {
+    console.log("Database Error:", error);
 });
 
 
@@ -35,4 +39,42 @@ module.exports = function (app) {
     });
 
     /*--- Scrape ---*/
+    app.get("/scrape", function (req, res) {
+        const url = "https://www.creepypasta.com/"
+        axios.get(url)
+            .then(function (response) {
+
+                // load response into cheerio by saving it as a variable
+                const $ = cheerio.load(response.data);
+
+                $(".pt-cv-title").each(function (i, element) {
+
+                    let title = $(this).children("a").text();
+                    let link = $(this).children("a").attr("href");
+    
+                    // if title and link exist
+                    if (title && link) {
+                        //save into database
+                        db.scrapedData.save({
+                                title: title,
+                                link: link
+                            },
+                            function (error, saved) {
+                                if (error) {
+                                    console.log(error);
+                                } else {
+                                    console.log(saved);
+                                }
+                            });
+                    }
+                });
+                
+
+            })
+        // .catch(function (error) {
+        //     console.log(error);
+        // });
+        res.send("scrape complete")
+
+    })
 }

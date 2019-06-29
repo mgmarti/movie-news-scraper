@@ -3,7 +3,6 @@
 const express = require("express");
 const app = express();
 
-const mongojs = require("mongojs");
 
 // Require request and cheerio. This makes the scraping possible
 const cheerio = require("cheerio");

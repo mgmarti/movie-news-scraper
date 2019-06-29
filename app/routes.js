@@ -50,13 +50,15 @@ module.exports = function (app) {
                 $(".pt-cv-title").each(function (i, element) {
 
                     let title = $(this).children("a").text();
+                    let summary = $(this).siblings(".pt-cv-content").text();
                     let link = $(this).children("a").attr("href");
     
-                    // if title and link exist
-                    if (title && link) {
+                    // if title, summary, and link exist
+                    if (title && summary && link) {
                         //save into database
                         db.scrapedData.save({
                                 title: title,
+                                summary: summary,
                                 link: link
                             },
                             function (error, saved) {

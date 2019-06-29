@@ -55,6 +55,7 @@ module.exports = function (app) {
 
                     // if title, summary, and link exist
                     if (title && summary && link) {
+                        
                         //save into database
                         db.scrapedData.save({
                                 title: title,
@@ -68,6 +69,7 @@ module.exports = function (app) {
                                     console.log(saved);
                                 }
                             });
+                            
                     }
                 });
 

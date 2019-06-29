@@ -9,7 +9,7 @@ The goal of this assignment was create a web app that lets users view and leave 
 
 **Node Packages:** 
 
-**Mongoose** 
+- **Mongoose** 
 - **Cheerio** 
 - **Express**
 - **Axios**

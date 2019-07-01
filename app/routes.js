@@ -2,22 +2,8 @@
 //====================================================================
 const cheerio = require("cheerio");
 const axios = require("axios");
-const mongojs = require("mongojs");
-
-// Database configuration
-// ===================================================================
-// Save the URL of our database as well as the name of our collection
-const databaseUrl = "movienewsscraper";
-const collections = ["scrapedData"];
-
-// Use mongojs to hook the database to the db variable
-const db = mongojs(databaseUrl, collections);
-
-// This makes sure that any errors are logged if mongodb runs into an issue
-db.on("error", function (error) {
-    console.log("Database Error:", error);
-});
-
+// const mongojs = require("mongojs");
+const db = require("../models/Article")
 
 
 module.exports = function (app) {
@@ -46,6 +32,7 @@ module.exports = function (app) {
 
                 // load response into cheerio by saving it as a variable
                 const $ = cheerio.load(response.data);
+                console.log($)
 
                 $(".bc-title").each(function (i, element) {
 
@@ -55,7 +42,7 @@ module.exports = function (app) {
 
                     // if title, summary, and link exist
                     if (title && summary && link) {
-                        
+
                         //save into database
                         db.scrapedData.save({
                                 title: title,
@@ -68,11 +55,9 @@ module.exports = function (app) {
                                 } else {
                                     console.log(saved);
                                 }
-                            });
-                            
+                            });   
                     }
                 });
-
 
             })
             .catch(function (error) {
@@ -81,4 +66,5 @@ module.exports = function (app) {
         res.send("scrape complete")
 
     })
+
 }

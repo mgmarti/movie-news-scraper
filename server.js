@@ -1,6 +1,7 @@
 // Dependencies
 // ===================================================================
 const express = require("express");
+const exphbs = require('express-handlebars');
 const app = express();
 
 
@@ -9,7 +10,9 @@ const cheerio = require("cheerio");
 const axios = require("axios");
 const PORT = process.env.PORT || 3000;
 
-app.set("view engine", "ejs");
+app.engine('handlebars', exphbs());
+app.set('view engine', 'handlebars');
+
 app.use(express.urlencoded({
     extended: true
 }));

@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(express.static("public"));
 
 // Connect to database
-mongoose.connect("mongodb://localhost/movienewsscraper", {
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/movienewsscraper", {
   useNewUrlParser: true
 });
 
